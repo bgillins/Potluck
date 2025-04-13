@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+{% load invite_tags %} <!-- Load custom tags -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Potluck Sign-up</title>
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 2em; background-color: #f4f4f4; }
+        h1, h2 { margin-bottom: 0.5em; color: #333; }
+        h1 { text-align: center; margin-bottom: 1em; }
+        h2 { border-bottom: 1px solid #ccc; padding-bottom: 0.3em; margin-top: 0; }
+        .form-container { background-color: #fff; padding: 1.5em 2em; border: 1px solid #ddd; margin: 0 auto 2em auto; border-radius: 8px; max-width: 600px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-container label { display: block; margin-bottom: 0.3em; font-weight: bold; color: #555; }
+        /* Apply width to input fields */
+        .form-container input[type="text"],
+        .form-container input[type="tel"], /* Better semantic type for phone */
+        .form-container select,
+        .form-container textarea {
+            width: 100%; /* Make inputs take full width */
+            padding: 0.6em;
+            margin-bottom: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; /* Include padding in width */
+        }
+        .form-container textarea { min-height: 80px; }
+        .form-container button { display: block; width: 100%; padding: 0.8em 1.5em; background-color: #5cb85c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em; transition: background-color 0.2s; }
+        .form-container button:hover { background-color: #4cae4c; }
+
+        /* Container for the category lists */
+        .categories-container {
+            display: flex; /* Enable Flexbox */
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+            gap: 1.5em; /* Space between columns */
+            margin-top: 2em;
+        }
+
+        /* Individual category column styling */
+        .category-section {
+            flex: 1; /* Allow columns to grow and shrink */
+            min-width: 200px; /* Minimum width before wrapping */
+            background-color: #fff;
+            padding: 1em 1.5em;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .category-section ul { list-style: none; padding-left: 0; margin-top: 0.5em; }
+        .category-section li {
+            background-color: #f9f9f9;
+            border: 1px solid #eaeaea;
+            padding: 0.8em;
+            margin-bottom: 0.7em;
+            border-radius: 4px;
+        }
+        .category-section li .item-name { font-weight: bold; }
+        .category-section li .submitter-name { font-size: 0.9em; color: #666; display: block; margin-top: 0.3em; }
+        .category-section li .edit-link {
+            font-size: 0.8em;
+            margin-left: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .category-section li .edit-link:hover { text-decoration: underline; }
+
+        .errorlist { color: #dc3545; list-style: none; padding-left: 0; margin-top: -0.5em; margin-bottom: 0.5em; font-size: 0.9em; }
+        hr { border: 0; height: 1px; background-color: #ddd; margin: 2em 0; }
+    </style>
+</head>
+<body>
+
+    <h1>Potluck Sign-up Sheet</h1>
+
+    <div class="form-container">
+        <h2>Bring an Item</h2>
+        <form method="post">
+            {% csrf_token %} <!-- Important for security -->
+
+            {{ form.non_field_errors }}
+
+            <p>
+                {{ form.submitter_name.errors }}
+                <label for="{{ form.submitter_name.id_for_label }}">{{ form.submitter_name.label }}:</label>
+                {{ form.submitter_name }}
+            </p>
+            <p>
+                {{ form.submitter_phone.errors }}
+                <label for="{{ form.submitter_phone.id_for_label }}">{{ form.submitter_phone.label }}:</label>
+                {{ form.submitter_phone }}
+            </p>
+            <p>
+                {{ form.group_name.errors }}
+                <label for="{{ form.group_name.id_for_label }}">{{ form.group_name.label }}:</label>
+                {{ form.group_name }}
+            </p>
+            <p>
+                {{ form.item_description.errors }}
+                <label for="{{ form.item_description.id_for_label }}">{{ form.item_description.label }}:</label>
+                {{ form.item_description }}
+            </p>
+
+            <button type="submit">Submit Item</button>
+        </form>
+    </div>
+
+    <hr>
+
+    <h1>What People Are Bringing</h1>
+
+    {% if grouped_items %}
+        <div class="categories-container"> <!-- Flex container -->
+            {% for category in categories %}
+                {% if category in grouped_items %}
+                    <div class="category-section">
+                        <h2>{{ category }}</h2>
+                        <ul>
+                            {% for item in grouped_items|get_item:category %}
+                                <li>
+                                    <span class="item-name">{{ item.item_description }}</span>
+                                    <span class="submitter-name">Brought by: {{ item.submitter_name }}</span>
+                                    <a href="{% url 'edit_item' item.pk %}" class="edit-link">[Edit]</a>
+                                </li>
+                            {% empty %}
+                                <li><em>No items yet for this category.</em></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% else %}
+                     <!-- Optionally show empty categories if needed -->
+                     <div class="category-section">
+                         <h2>{{ category }}</h2>
+                         <ul><li><em>No items yet for this category.</em></li></ul>
+                     </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <p><em>Nobody has signed up to bring anything yet!</em></p>
+    {% endif %}
+
+</body>
+</html> 

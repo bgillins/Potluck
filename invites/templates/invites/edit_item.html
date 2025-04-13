@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Reference item description in title if available -->
+    <title>Edit Item: {{ item_to_edit.item_description|truncatechars:30 }}</title>
+    <!-- Link to the same basic styling as the main page -->
+    <style>
+        body { font-family: sans-serif; line-height: 1.6; margin: 2em; background-color: #f4f4f4; }
+        h1 { margin-bottom: 0.5em; color: #333; text-align: center; }
+        .form-container { background-color: #fff; padding: 1.5em 2em; border: 1px solid #ddd; margin: 2em auto; border-radius: 8px; max-width: 600px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .form-container label { display: block; margin-bottom: 0.3em; font-weight: bold; color: #555; }
+        .form-container input[type="text"],
+        .form-container input[type="tel"],
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 0.6em;
+            margin-bottom: 1em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-container textarea { min-height: 80px; }
+        .form-container button { display: block; width: 100%; padding: 0.8em 1.5em; background-color: #5cb85c; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1.1em; transition: background-color 0.2s; }
+        .form-container button:hover { background-color: #4cae4c; }
+        .cancel-link { display: block; text-align: center; margin-top: 1em; color: #666; text-decoration: none; }
+        .cancel-link:hover { text-decoration: underline; }
+        .errorlist { color: #dc3545; list-style: none; padding-left: 0; margin-top: -0.5em; margin-bottom: 0.5em; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+
+    <h1>Edit Potluck Item</h1>
+
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %} <!-- Important for security -->
+
+            {{ form.non_field_errors }}
+
+            <p>
+                {{ form.submitter_name.errors }}
+                <label for="{{ form.submitter_name.id_for_label }}">{{ form.submitter_name.label }}:</label>
+                {{ form.submitter_name }}
+            </p>
+            <p>
+                {{ form.submitter_phone.errors }}
+                <label for="{{ form.submitter_phone.id_for_label }}">{{ form.submitter_phone.label }}:</label>
+                {{ form.submitter_phone }}
+            </p>
+            <p>
+                {{ form.group_name.errors }}
+                <label for="{{ form.group_name.id_for_label }}">{{ form.group_name.label }}:</label>
+                {{ form.group_name }}
+            </p>
+            <p>
+                {{ form.item_description.errors }}
+                <label for="{{ form.item_description.id_for_label }}">{{ form.item_description.label }}:</label>
+                {{ form.item_description }}
+            </p>
+
+            <button type="submit">Save Changes</button>
+        </form>
+        <a href="{% url 'potluck_list' %}" class="cancel-link">Cancel</a>
+    </div>
+
+</body>
+</html> 
