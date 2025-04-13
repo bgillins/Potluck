@@ -3,12 +3,12 @@ from django.db import models
 # Define choices for groups and categories
 # Customize these group names as needed
 GROUP_CHOICES = [
-    ('Family A', 'Family A (Entrée)'),
-    ('Team Awesome', 'Team Awesome (Entrée)'),
-    ('The Foodies', 'The Foodies (Sides)'),
-    ('Neighbors', 'Neighbors (Sides)'),
-    ('Sweet Tooth Crew', 'Sweet Tooth Crew (Desserts)'),
-    ('Drink Masters', 'Drink Masters (Drinks/Utensils)'),
+    ('Family A', 'Falzon Group (Entrée)'),
+    ('Team Awesome', 'Lewis Group (Entrée)'),
+    ('The Foodies', 'Menor Group (Sides)'),
+    ('Neighbors', 'Kent Group (Sides)'),
+    ('Sweet Tooth Crew', 'Wilson Group (Desserts)'),
+    ('Drink Masters', 'Niro Group (Drinks/Utensils)'),
 ]
 
 CATEGORY_CHOICES = [
