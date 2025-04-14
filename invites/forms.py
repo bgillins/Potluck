@@ -10,6 +10,8 @@ class PotluckItemForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # Optional: Add styling classes or other attributes if needed later
-        # self.fields['group_name'].widget.attrs.update({'class': 'form-select'})
-        # self.fields['item_description'].widget.attrs.update({'class': 'form-control'}) 
+        # Add Bootstrap classes to each field for modern styling
+        self.fields['submitter_name'].widget.attrs.update({'class': 'form-control'})
+        self.fields['submitter_phone'].widget.attrs.update({'class': 'form-control'})
+        self.fields['group_name'].widget.attrs.update({'class': 'form-select'})
+        self.fields['item_description'].widget.attrs.update({'class': 'form-control'})
